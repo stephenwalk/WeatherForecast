@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block head_title %}Manage Remiders{% endblock %}
+{% block base_content %}
+<h3 class="main-title pull-left"><span class="glyphicon glyphicon-bookmark"></span> My Reminders</h3>
+<div class="alert alert-info col-sm-12 col-md-12">
+   <p>The reminders will be sent at 10:00 pm PST every night.</p>
+</div>
+<table class="table table-hover">
+    <tr>
+       <form method='post'>
+           {% csrf_token %}
+           <td class="col-sm-2">{{ form.zipcode }}</td>
+           <td class="col-sm-9">{{ form.reminder }}</td>
+           <td class="col-sm-1">
+               <button class="btn btn-link" style="padding-left: 0px">
+                   <span class="glyphicon glyphicon-plus text-primary"></span>
+               </button>
+           </td>
+       </form>
+   </tr>
+    <thead>
+   <tr>
+       <th>Zipcode <span class="glyphicon glyphicon-search"></span></th>
+       <th>Reminder <span class="glyphicon glyphicon-bell"></span></th>
+       <th></th>
+   </tr>
+   </thead>
+   <tbody>
+   {% for reminder in reminders %}
+   <tr>
+       <td class="col-sm-2">{{ reminder.zipcode }}</td>
+       <td class="col-sm-9">
+           {% for index, label in reminder.WARNING_CHOICE %}
+           {% if reminder.warning_event == index %}
+           {{ label }}
+               {% if reminder.warning_event == 0 %} <i class="wi wi-day-sunny"></i>
+               {% endif %}
+               {% if reminder.warning_event == 1 %} <i class="wi wi-raindrop"></i>
+               {% endif %}
+               {% if reminder.warning_event == 2 %} <i class="wi wi-snowflake-cold"></i>
+               {% endif %}
+                {% if reminder.warning_event == 3 %} <i class="wi wi-cloudy-windy"></i>
+               {% endif %}
+                {% if reminder.warning_event == 4 %} <i class="wi wi-day-cloudy"></i>
+               {% endif %}
+           {% endif %}
+           {% endfor %}
+       </td>
+       <td class="col-sm-1"><a href="/del_reminder?id={{ reminder.id }}">
+           <span class="glyphicon glyphicon-remove text-danger"></span>
+       </a></td>
+   </tr>
+   {% endfor %}
+   </tbody>
+</table>
+<div class="panel panel-default">
+   <p class="panel-heading">Want to know tomorrow's weather condition now?</p>
+   <div class="panel-body">
+       <a href="test_email" class="btn btn-info">Send Email</a>
+   </div>
+</div>
+{% endblock %}
